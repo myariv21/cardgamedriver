@@ -165,3 +165,162 @@ The driver program runs 10000 games of blackjack by instantiating a `Blackjack` 
 #### Lamarckian Poker testing
 
 The driver program runs one simulated Lamarckian Poker game. It does so by instantiating a `LamarckianPoker` object and dealing hands to the two players. It then has the object execute game turns until the `turn()` method indicates that the game is complete and the hands are ready to be evaluated. The evaluate of the hands and determination of a winner is not yet implemented.
+
+
+MY VERSION
+
+
+## Two Card Games: Blackjack and Lamarckian Poker
+
+### Utility Classes
+
+Both card games will require the following classes:
+
+### `Card`
+
+The `Card` class implements the `Comparable<Card>` interface to enable comparison between cards, mainly for sorting purposes.
+
+#### Attributes:
+- **Suit**: Chosen from the `Suit` enum (`CLUBS`, `DIAMONDS`, `HEARTS`, `SPADES`).
+- **Rank**: Chosen from the `Rank` enum (`ACE`, `TWO`, `THREE`, `FOUR`, `FIVE`, `SIX`, `SEVEN`, `EIGHT`, `NINE`, `TEN`, `JACK`, `QUEEN`, `KING`).
+
+#### Constructors:
+- `public Card()` generates a randomly chosen card.
+- `public Card(Suit suit, Rank rank)` creates a card with the specified suit and rank.
+
+#### Methods:
+- `public Suit getSuit()` returns the suit of the card.
+- `public Rank getRank()` returns the rank of the card.
+- `public String toString()` returns a well-formatted string representation of the card.
+- `public int compareTo(Card otherCard)` compares this card to another based on rank first and suit second.
+
+### `Deck`
+
+The `Deck` class represents a deck of cards used in card games.
+
+#### Attributes:
+- **deck**: A list of `Card` objects.
+- **Random**: A random number generator used for shuffling.
+
+#### Constructors:
+- `public Deck()` initializes a standard 52-card deck using the `build()` method.
+
+#### Methods:
+- `public ArrayList<Card> getDeck()` returns the deck.
+- `public void clear()` empties the deck.
+- `public void build()` populates the deck with 52 cards in a standard order.
+- `public void shuffle()` shuffles the deck using a standard shuffling algorithm.
+- `public Card pick(int i)` returns the card at index `i` and removes it from the deck.
+- `public Card deal()` returns the card at index 0 (top of the deck) and removes it.
+- `public int size()` returns the number of cards remaining in the deck.
+- `public String toString()` returns a well-formatted string representation of the deck.
+
+### `Hand`
+
+The `Hand` class represents a collection of cards held by a player.
+
+#### Attributes:
+- **hand**: A list of `Card` objects.
+
+#### Constructors:
+- `public Hand()` initializes an empty list for the hand.
+
+#### Methods:
+- `public ArrayList<Card> getHand()` returns the hand.
+- `public void addCard(Card card)` adds a card to the hand.
+- `public void removeCard(Card card)` removes a card from the hand.
+- `public void reset()` clears the hand.
+- `public Card getCard(int index)` returns the card at the specified index.
+- `public int getTotalValue()` calculates the total value of the hand based on Blackjack rules (number cards by face value, face cards by 10, and Aces as either 1 or 11).
+- `public String toString()` returns a well-formatted string representation of the hand.
+
+---
+
+### Blackjack Game
+
+Blackjack is a simple two-player game where the player competes against a dealer.
+
+#### Rules:
+- Each player (including the dealer) is dealt two cards.
+- The player draws cards until the total hand value is at least 16, or they bust if the total exceeds 21.
+- The dealer draws cards until their total hand value is at least 17, or they bust if the total exceeds 21.
+
+#### `Blackjack` Class
+
+The `Blackjack` class implements the core game mechanics.
+
+#### Attributes:
+- **playerHand**: A `Hand` object representing the player's hand.
+- **dealerHand**: A `Hand` object representing the dealer's hand.
+- **deck**: A `Deck` object representing the deck used in the game.
+
+#### Constructor:
+- `public Blackjack()` initializes the game and prepares the deck using the `reset()` method.
+
+#### Methods:
+- `public Hand getPlayerHand()` returns the player's hand.
+- `public Hand getDealerHand()` returns the dealer's hand.
+- `public Deck getDeck()` returns the current deck.
+- `public void reset()` initializes a new shuffled deck.
+- `public void deal()` deals two cards to both the player and the dealer.
+- `public boolean playerTurn()` executes the player's turn and returns `true` if the player hasn't busted.
+- `public boolean dealerTurn()` executes the dealer's turn and returns `true` if the dealer hasn't busted.
+- `public String toString()` returns a string representation of the game.
+
+---
+
+### Lamarckian Poker Game
+
+Lamarckian Poker is a unique card game where players attempt to improve their poker hands by sacrificing cards from their hand to draw better ones from a pool.
+
+#### Rules:
+- Each player starts with four cards, and there is a pool of four cards available to both players.
+- Each player sacrifices a card from their hand, and the player who sacrifices the higher card takes all matching cards (by rank or suit) from the pool and adds them to their hand.
+- The process continues until both players have at least 7 cards in their hands.
+- At the end of the game, players evaluate their hands, and the best five-card hand wins.
+
+#### `LamarckianPoker` Class
+
+The `LamarckianPoker` class implements the core game mechanics.
+
+#### Attributes:
+- **player1Hand**: A `Hand` object representing the first player's hand.
+- **player2Hand**: A `Hand` object representing the second player's hand.
+- **pool**: A `Hand` object representing the pool of cards.
+- **deck**: A `Deck` object representing the deck used in the game.
+- **discardPile**: A `Deck` object representing the discard pile.
+- **random**: A `Random` object for random selections during the turn.
+
+#### Constructor:
+- `public LamarckianPoker()` initializes a new game using the `reset()` method.
+
+#### Methods:
+- `public Hand getPlayer1Hand()` returns the first player's hand.
+- `public Hand getPlayer2Hand()` returns the second player's hand.
+- `public Hand getPool()` returns the pool of cards.
+- `public void reset(boolean newDeck)` sets up a new game with a shuffled deck and discard pile.
+- `public void deal()` deals 4 cards to each player.
+- `public void makePool()` generates a new pool of 4 cards from the deck.
+- `public boolean turn()` implements the rules of the game for a single turn, returning `true` if both players have less than 7 cards in hand, otherwise `false`.
+- `public String toString()` returns a string representation of the game.
+
+---
+
+### Driver Program
+
+The `CardGameDriver` class is used to test both the `Blackjack` and `LamarckianPoker` games.
+
+#### Blackjack Testing:
+- Simulates 10,000 games of Blackjack.
+- For each game, the driver will deal cards, execute the player and dealer turns, and determine the outcome (dealer win, player win, or tie).
+- Results are displayed, including the number of dealer wins, player wins, and pushes (ties).
+
+#### Lamarckian Poker Testing:
+- Simulates one game of Lamarckian Poker.
+- Deals hands to both players, executes turns, and evaluates whether both players have at least 7 cards.
+- The evaluation of hands and determination of the winner is not yet implemented.
+
+---
+
+### Final Notes:
+This design is focused on implementing and simulating card games with clean code that follows object-oriented principles. It is structured to test individual components like `Card`, `Deck`, and `Hand`, ensuring that the main game logic in `Blackjack` and `LamarckianPoker` works smoothly. Further improvements can include more complex rules, better hand evaluation for poker, and advanced game strategies.
